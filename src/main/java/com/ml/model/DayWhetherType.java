@@ -5,25 +5,30 @@ public enum DayWhetherType {
 	DROUGHT {
 
 		public String getDescription() {
-			return "Sequia";
+			return"Sequia";
 		}
 	},
 	RAIN {
 
 		public String getDescription() {
-			return "Lluvia";
+			return"Lluvia";
 		}
 	},
 	MAX_RAIN {
 
 		public String getDescription() {
-			return "Lluvia maxima";
+			return"Lluvia maxima";
 		}
 	},
 	OPTIMAL {
 
-		public String getDescription() {
+	public String getDescription() {
 			return "Clima optimo";
+		}
+	}
+	,UNDEFINED{
+		public String getDescription() {
+			return "Sin registro, los planetas se encuentran desalineados fuera del sol";
 		}
 
 	};
