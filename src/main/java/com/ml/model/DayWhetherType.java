@@ -14,12 +14,6 @@ public enum DayWhetherType {
 			return"Lluvia";
 		}
 	},
-	MAX_RAIN {
-
-		public String getDescription() {
-			return"Lluvia maxima";
-		}
-	},
 	OPTIMAL {
 
 	public String getDescription() {

@@ -1,8 +1,6 @@
 package com.ml.utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.locationtech.jts.geom.Coordinate;
@@ -10,8 +8,8 @@ import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LinearRing;
 import org.locationtech.jts.geom.Polygon;
+import org.springframework.stereotype.Component;
 
-import com.kenai.jffi.Array;
 import com.ml.exception.GeometryCalculationException;
 import com.ml.model.Position;
 import com.ml.model.SolarSystem;
@@ -19,23 +17,28 @@ import com.ml.model.SolarSystem;
  * algunos calculos sobre geometria. 
  */
 
+@Component
 public class WeatherProcessor {
 
-	public void processWetherForTeenYears(SolarSystem solarSystem) {
+	private GeometryFactory geometryFactory = new GeometryFactory();
+	
+	
+	public boolean processWetherForTeenYears(SolarSystem solarSystem) {
 		
+		return true;
 	}
 	
 	//crea la figura que forman los tres planetas uniendo sus posiciones (sin el sol) si el area es cero entonces estan alineados
 	private boolean isPlannetsAlignedWithoutSun(SolarSystem solarSystem, Polygon planetsPolygon) throws GeometryCalculationException {
-		 // Polygon planetsPolygon = createPolygonBetweenPlanets(solarSystem, false);
-		  if(planetsPolygon==null) {
+		  
+		 if(planetsPolygon==null) {
 			  throw new GeometryCalculationException("Error de trazado en planetas contiguos");
-		  }
-//		  double perimeter = planets.getLength();		  
+		  }		  
 		 return  (planetsPolygon.getArea()==0)?true:false;
 	}
 	
 	private boolean isPlannetsAlegnedWithSun(SolarSystem solarSystem) throws GeometryCalculationException {
+		//Creo un nuevo poligono esta vez con el sol incluido
 		  Polygon planetsPolygon = createPolygonBetweenPlanets(solarSystem,true);
 		  if(planetsPolygon==null) {
 			  throw new GeometryCalculationException("Error de trazado en planetas contiguos");
@@ -43,16 +46,14 @@ public class WeatherProcessor {
 		 return  (planetsPolygon.getArea()==0)?true:false;
 	}
 	
-	private boolean isSunInsidePolygonPlannets(SolarSystem solarSystem, Polygon planetsPolygon) {
+	private boolean isSunInsidePolygonPlannets(SolarSystem solarSystem, Polygon planetsPolygon) { 
 		//Creo al sol
-		GeometryFactory geometryFactory = new GeometryFactory();
-		Coordinate[] coordSun = {new Coordinate(0,0)};
-//		Geometry geometrySun = geometryFactory.  (coordSun);
-		return  (planetsPolygon.getArea()==0)?true:false;
+	    Coordinate coordinateSun = new Coordinate(0,0);
+		Geometry sun = geometryFactory.createPoint(coordinateSun);
+		return  (planetsPolygon.contains(sun))?true:false;
 	}
 	
-	public Polygon createPolygonBetweenPlanets(SolarSystem solarSystem, boolean includeSun) {
-		GeometryFactory gf = new GeometryFactory();	  
+	public Polygon createPolygonBetweenPlanets(SolarSystem solarSystem, boolean includeSun) {  
 		  ArrayList<Coordinate> coordsList = convertCurrentPositionPlanetsToCoordinates(solarSystem);
 		  //Segun lo indicado incluyo tambien la posicion del sol
 		  if(includeSun) {
@@ -60,9 +61,9 @@ public class WeatherProcessor {
 		  }
 		  //Agrego una cuarta posicion que se corresponde a la del primer planeta de la lista. Esto es requisito en JTS para cerrar el poligono.
 		  coordsList.add(positionToCoordinate( solarSystem.getPlanets().get(0).getPosition()));
-		  LinearRing lRing = gf.createLinearRing( (Coordinate[]) coordsList.toArray() );
+		  LinearRing lRing = geometryFactory.createLinearRing( (Coordinate[]) coordsList.toArray() );
 		  LinearRing holes[] = null; // no aplica para este caso
-		  Polygon planets = gf.createPolygon(lRing, holes );
+		  Polygon planets = geometryFactory.createPolygon(lRing, holes );
 		return planets;
 	}
 

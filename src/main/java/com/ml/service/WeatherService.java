@@ -5,4 +5,6 @@ import com.ml.model.Weather;
 public interface WeatherService {
 
 	Weather findWetherByDay(int day);
+	
+	boolean predictWeatherForTeenYears();
 }

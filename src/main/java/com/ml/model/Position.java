@@ -2,8 +2,8 @@ package com.ml.model;
 
 public class Position {
 	
-	private int coordinateX;
-	private int coordinateY;
+	private double coordinateX;
+	private double coordinateY;
 	private Integer distanceToSun;
 	private int currentAngleToSun;
 	
@@ -14,16 +14,16 @@ public class Position {
 		this.coordinateY = y;
 	}
 	
-	public int getCoordinateX() {
+	public double getCoordinateX() {
 		return coordinateX;
 	}
-	public void setCoordinateX(int coordinateX) {
+	public void setCoordinateX(double coordinateX) {
 		this.coordinateX = coordinateX;
 	}
-	public int getCoordinateY() {
+	public double getCoordinateY() {
 		return coordinateY;
 	}
-	public void setCoordinateY(int coordinateY) {
+	public void setCoordinateY(double coordinateY) {
 		this.coordinateY = coordinateY;
 	}
 	public int getDistanceToSun() {
