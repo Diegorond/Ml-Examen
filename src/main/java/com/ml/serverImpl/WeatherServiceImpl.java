@@ -2,6 +2,7 @@ package com.ml.serverImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.ml.exception.SolarSystemException;
 import com.ml.model.SolarSystem;
 import com.ml.model.Weather;
 import com.ml.repository.WeatherDao;
@@ -26,8 +27,12 @@ public class WeatherServiceImpl implements WeatherService{
 	}
 
 	@Override
-	public boolean predictWeatherForTeenYears() {
-		return weatherProcessor.processWetherForTeenYears(solarSytem);
+	public void  predictWeatherForTeenYears() throws SolarSystemException {
+		try {
+			weatherProcessor.processWetherForTeenYears(solarSytem);
+		} catch (SolarSystemException e) {
+			throw e;
+		}
 	}	
 
 }

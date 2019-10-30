@@ -11,6 +11,8 @@ public class Weather {
 	
 	private Integer id;
 	private DayWhetherType dayWhetherType;
+	/*Este atributo solo se utilizara para los dias de lluvia y que son maximos lo hice de esa forma
+	para no crear especificaciones de clima adicionales y reducir complejidad*/
 	private Integer perimeterBetweenPlanets;
 	private int dayNumber;
 	

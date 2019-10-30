@@ -8,24 +8,57 @@ import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LinearRing;
 import org.locationtech.jts.geom.Polygon;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ml.exception.CalculateWeatherProcessGenericException;
 import com.ml.exception.GeometryCalculationException;
+import com.ml.exception.SolarSystemException;
+import com.ml.model.DayWhetherType;
 import com.ml.model.Position;
 import com.ml.model.SolarSystem;
+import com.ml.model.Weather;
 /*Utilizo el framework JTS para topologia el cual  dara soporte para simplificar
  * algunos calculos sobre geometria. 
  */
+import com.ml.repository.WeatherDao;
 
 @Component
 public class WeatherProcessor {
 
 	private GeometryFactory geometryFactory = new GeometryFactory();
 	
+	@Autowired
+	private WeatherDao weatherDao;
 	
-	public boolean processWetherForTeenYears(SolarSystem solarSystem) {
+	public void processWetherForTeenYears(SolarSystem solarSystem) throws SolarSystemException{
+		//Proceso el clima por los diez anios avanzando de a un dia y guardando el clima en la base para luego ser consultado
+        int cantDaysTeenYears = 3650;
+        try {
+			for (int dayNumber = 1; dayNumber <= cantDaysTeenYears ; dayNumber++) {
+				solarSystem.moveOneDay();
+				calculateAndSaveWeather(solarSystem,dayNumber);
+	        }
+        }catch(GeometryCalculationException e){
+        	throw e;
+        }catch(Exception e){
+        	throw new CalculateWeatherProcessGenericException("Error desconocido al procesar el clima, se resetean los planetas y se eliminan los datos guardados");
+        }
+	}
+	
+	private void calculateAndSaveWeather(SolarSystem solarSystem, int dayNumber) throws GeometryCalculationException{
 		
-		return true;
+		Weather weather = new Weather();
+		//Comiendo evaluando el caso que se repetira mas cantidad de veces (planetas desalineados)
+		 //Creo el triangulo (poligono) que forman los tres planetas desalineados.
+		Polygon planetsPolygon = createPolygonBetweenPlanets(solarSystem, false);
+		//Verifico  si el sol esta contenido dentro del triangulo que forman los planetas
+		if(isSunInsidePolygonPlannets(solarSystem, planetsPolygon)) {
+			weather.setDayNumber(dayNumber);
+			weather.setDayWhetherType(DayWhetherType.RAIN);
+		}
+		
+		
 	}
 	
 	//crea la figura que forman los tres planetas uniendo sus posiciones (sin el sol) si el area es cero entonces estan alineados
