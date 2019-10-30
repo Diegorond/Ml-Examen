@@ -49,16 +49,32 @@ public class WeatherProcessor {
 	private void calculateAndSaveWeather(SolarSystem solarSystem, int dayNumber) throws GeometryCalculationException{
 		
 		Weather weather = new Weather();
-		//Comiendo evaluando el caso que se repetira mas cantidad de veces (planetas desalineados)
+		weather.setDayNumber(dayNumber);
 		 //Creo el triangulo (poligono) que forman los tres planetas desalineados.
 		Polygon planetsPolygon = createPolygonBetweenPlanets(solarSystem, false);
+		//Si los planetas estan alineados entre si el poligono tendra superficie cero
+		if(isPlannetsAlignedWithoutSun(solarSystem, planetsPolygon)) {
+			//Ahora verifico si ademas estan alineados respecto al sol
+			if(isPlannetsAlegnedWithSun(solarSystem)) {
+				//Los planetas estan alineados junto con el sol por lo que hay sequia
+				weather.setDayWhetherType(DayWhetherType.OPTIMAL);
+				return;
+			}
+			//Solo estan alineados entre si sin el sol por lo que el clima es optimo
+			weather.setDayWhetherType(DayWhetherType.OPTIMAL);
+			return;
+		}
 		//Verifico  si el sol esta contenido dentro del triangulo que forman los planetas
 		if(isSunInsidePolygonPlannets(solarSystem, planetsPolygon)) {
-			weather.setDayNumber(dayNumber);
+			//Obtengo el perimetro y se lo paso al systema solar para que evalue si es maximo y asi lo guarde
+			double perimeter = planetsPolygon.getLength();
+			solarSystem.setPerimeterMaxRegisteredBetweenPlanets(perimeter);
 			weather.setDayWhetherType(DayWhetherType.RAIN);
-		}
-		
-		
+			return;
+		}else {
+			//Los planetas forman un triangulo pero el sol no esta en su interior 
+			weather.setDayWhetherType(DayWhetherType.UNDEFINED);
+		} 
 	}
 	
 	//crea la figura que forman los tres planetas uniendo sus posiciones (sin el sol) si el area es cero entonces estan alineados
@@ -71,11 +87,12 @@ public class WeatherProcessor {
 	}
 	
 	private boolean isPlannetsAlegnedWithSun(SolarSystem solarSystem) throws GeometryCalculationException {
-		//Creo un nuevo poligono esta vez con el sol incluido
+		//Creo un nuevo poligono esta vez con el sol inctluido
 		  Polygon planetsPolygon = createPolygonBetweenPlanets(solarSystem,true);
 		  if(planetsPolygon==null) {
 			  throw new GeometryCalculationException("Error de trazado en planetas contiguos");
-		  }	  
+		  }	 
+		  //Si el area es cero entonces los vertices estan alineados por ende los planetas
 		 return  (planetsPolygon.getArea()==0)?true:false;
 	}
 	
