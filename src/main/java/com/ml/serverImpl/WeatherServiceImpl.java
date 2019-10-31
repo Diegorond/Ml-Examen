@@ -26,7 +26,7 @@ public class WeatherServiceImpl implements WeatherService{
 	@Override
 	public WeatherResponseDTO findWetherByDay(int day) {
 		Weather weather = weatherDao.findByDayNumber(day);
-		return null;
+		return buildWeatherToDTO(weather);
 	}
 
 	@Override

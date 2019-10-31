@@ -1,12 +1,21 @@
 package com.ml.model;
 
-public abstract class Planet {
+public  class Planet {
 
-	protected String name;
-	public Position position;
-	public RotationalSpeed rotationalSpeed;
+	private String name;
+	private Position position;
+	private  RotationalSpeed rotationalSpeed;
 	
-	public abstract String getName();
+	public Planet(String name, Integer distanceToSun, int angularSpeedPeerDay, boolean counterclockwise) {
+		this.setName(name);
+		//Todos los planetas comienzan alineados en 0 grados
+		Position position = new Position(distanceToSun, distanceToSun.intValue() , 0);
+		this.position = position;
+		RotationalSpeed rotationalSpeed = new RotationalSpeed();
+		rotationalSpeed.setAngularSpeedPeerDay(angularSpeedPeerDay);
+		rotationalSpeed.setCounterclockwise(counterclockwise);
+		this.rotationalSpeed = rotationalSpeed;
+	}
 
 	public Position getPosition() {
 		return position;
@@ -19,10 +28,6 @@ public abstract class Planet {
 	}
 	public void setRotationalSpeed(RotationalSpeed rotationalSpeed) {
 		this.rotationalSpeed = rotationalSpeed;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public void moveOneDay() {
@@ -49,6 +54,14 @@ public abstract class Planet {
 		double nexY = this.position.getCoordinateY() + this.rotationalSpeed.getAngularSpeedPeerDay()*Math.sin(Math.toRadians(this.position.getCurrentAngleToSun()));
 		this.position.setCoordinateX(nexX);
 		this.position.setCoordinateY(nexY);
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 }

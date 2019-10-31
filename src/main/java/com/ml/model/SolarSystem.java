@@ -10,6 +10,10 @@ public class SolarSystem {
 	public List<Planet> getPlanets() {
 		return planets;
 	}
+	
+	private void init() {
+		Planet Ferengi  = new Planet( "Ferengi", new Integer(500), 1,  false); // vulcano antihorario true
+	}
 
 	public void setPlanets(List<Planet> planets) {
 		this.planets = planets;
