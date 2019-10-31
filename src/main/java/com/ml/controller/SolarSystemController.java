@@ -20,8 +20,9 @@ public class SolarSystemController {
 	
 	@GetMapping(value = "/clima/{dia}")
 	ResponseEntity<WeatherResponseDTO> findWeatherByDay(@PathVariable int dia){
-		Weather wweatherService
-		return new ResponseEntity<WeatherResponseDTO>(
+//		Weather weatherService
+//		return new ResponseEntity<WeatherResponseDTO>(
+				return null;
 	}
 
 }

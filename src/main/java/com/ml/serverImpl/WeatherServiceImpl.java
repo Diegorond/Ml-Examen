@@ -38,21 +38,22 @@ public class WeatherServiceImpl implements WeatherService{
 		}
 	}	
 	
-	private WeatherResponseDTO convertWeatherToDTO(Weather weather) {
+	private WeatherResponseDTO buildWeatherToDTO(Weather weather) {
 
 		WeatherResponseDTO responseDTO = new WeatherResponseDTO();
+		responseDTO.setDia(new Integer(weather.getDayNumber()).toString());
 		switch(weather.getDayWhetherType()) {
 		  case RAIN:
-		    // code block
+		    responseDTO.setClima("Se espera un dia lluvia");
 		    break;
 		  case DROUGHT:
-		    // code block
+		    responseDTO.setClima("Habra sequia para esta jornada");
 		    break;
 		  case OPTIMAL:
-			    // code block
+		    responseDTO.setClima("Se espera un hermoso dia");
 			    break;
 		  case UNDEFINED:
-			    // code block
+			    responseDTO.setClima("Sin pronostico planetas en posicion invalida");
 			    break;
 		  default:
 		    // code block

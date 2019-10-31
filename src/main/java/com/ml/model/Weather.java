@@ -1,6 +1,8 @@
 package com.ml.model;
 
 import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
@@ -34,9 +36,11 @@ public class Weather {
 	
 	@Transient
 	public String getDescription() {
+
 		return "construir descripcion clima";
 	}
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "DAY_WEATHER_TYPE" )
 	public DayWhetherType getDayWhetherType() {
 		return dayWhetherType;

@@ -2,19 +2,21 @@ package com.ml.request.dto;
 
 public class WeatherResponseDTO {
 
-	private String dayNumber;
-	private String description;
+	private String dia;
+	private String clima;
 	
-	public String getDayNumber() {
-		return dayNumber;
+
+	public String getClima() {
+		return clima;
 	}
-	public void setDayNumber(String dayNumber) {
-		this.dayNumber = dayNumber;
+	public void setClima(String clima) {
+		this.clima = clima;
 	}
-	public String getDescription() {
-		return description;
+	public String getDia() {
+		return dia;
 	}
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDia(String dia) {
+		this.dia = dia;
 	}
+
 }
