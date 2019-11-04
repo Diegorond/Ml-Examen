@@ -12,18 +12,18 @@ import com.ml.service.WeatherService;
 import com.ml.utils.WeatherProcessor;
 
 @Component
-public class WeatherServiceImpl implements WeatherService{
+public class WeatherServiceImpl implements WeatherService {
 
 	@Autowired
 	SolarSystem solarSytem;
-	
+
 	@Autowired
 	private WeatherDAO weatherDao;
-	
+
 	@Autowired
 	private WeatherProcessor weatherProcessor;
-	
-	//Devuelve el clima para un dia dado (dia 1 a 3650)
+
+	// Devuelve el clima para un dia dado (dia 1 a 3650)
 	@Override
 	public WeatherResponseDTO findWetherByDay(int day) throws SolarSystemException {
 		Weather weather = weatherDao.findByDayNumber(day);
@@ -31,36 +31,35 @@ public class WeatherServiceImpl implements WeatherService{
 	}
 
 	@Override
-	public void  predictWeatherForTeenYears() throws SolarSystemException {
+	public void predictWeatherForTeenYears() throws SolarSystemException {
 		try {
 			weatherProcessor.processWetherForTeenYears(solarSytem);
 		} catch (SolarSystemException e) {
 			throw e;
 		}
-	}	
-	
+	}
+
 	private WeatherResponseDTO buildWeatherToDTO(Weather weather) {
 
 		WeatherResponseDTO responseDTO = new WeatherResponseDTO();
 		responseDTO.setDia(new Integer(weather.getDayNumber()).toString());
-		switch(weather.getDayWhetherType()) {
-		  case RAIN:
-		    responseDTO.setClima("Se espera un dia lluvia");
-		    break;
-		  case DROUGHT:
-		    responseDTO.setClima("Habra sequia para esta jornada");
-		    break;
-		  case OPTIMAL:
-		    responseDTO.setClima("Se espera un hermoso dia");
-			    break;
-		  case UNDEFINED:
-			    responseDTO.setClima("Sin pronostico planetas en posicion invalida");
-			    break;
-		  default:
-		    // code block
+		switch (weather.getDayWhetherType()) {
+		case RAIN:
+			responseDTO.setClima("Se espera un dia lluvia");
+			return responseDTO;
+
+		case DROUGHT:
+			responseDTO.setClima("Habra sequia para esta jornada");
+			return responseDTO;
+		case OPTIMAL:
+			responseDTO.setClima("Se espera un hermoso dia");
+			return responseDTO;
+		case UNDEFINED:
+			responseDTO.setClima("Sin pronostico planetas en posicion invalida");
+			return responseDTO;
+		default:
+			return null;
 		}
-		
-		return null;
 	}
 
 }
