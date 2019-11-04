@@ -78,12 +78,12 @@ public class WeatherProcessorImpl implements WeatherProcessor {
 			//Obtengo el perimetro y se lo paso al systema solar para que evalue si es maximo y asi lo guarde
 			solarSystem.setPerimeterMaxRegisteredBetweenPlanets(perimeter);
 			weather.setDayWhetherType(DayWhetherType.RAIN);
+			weather.setPerimeterBetweenPlanets(perimeter);
 			weatherDao.save(weather);
 			return;
 		}else {
 			//Los planetas forman un triangulo pero el sol no esta en su interior 
 			weather.setDayWhetherType(DayWhetherType.UNDEFINED);
-			weather.setPerimeterBetweenPlanets(perimeter);
 			weatherDao.save(weather);
 		} 
 	}

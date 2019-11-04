@@ -7,7 +7,7 @@ public  class Planet {
 	private  RotationalSpeed rotationalSpeed;
 	
 	public Planet(String name, Integer distanceToSun, int angularSpeedPeerDay, boolean counterclockwise) {
-		this.setName(name);
+		this.name=name;
 		//Todos los planetas comienzan alineados en 0 grados
 		Position position = new Position(distanceToSun, distanceToSun.intValue() , 0);
 		this.position = position;
@@ -29,15 +29,23 @@ public  class Planet {
 	public void setRotationalSpeed(RotationalSpeed rotationalSpeed) {
 		this.rotationalSpeed = rotationalSpeed;
 	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public void moveOneDay() {
 		/*La posicion para las coordenada X,Y en un dia de avance sera
-		 * X = X' + W.cos(O)
-		 * Y = Y'+W.sen(O)
-		 * donde X',Y' son las posiciones iniciales, W la velocidad angular y O el angulo actual respecto al sol
+		 * X = r.cos(O)
+		 * Y = r.sen(O)
+		 * donde "r" es el radio y "O" el angulo actual respecto al sol
 		 * expresado en radianes
 		 * */
-		
+		// Si llega a los 360 vuelve a 0 grados porque dio la vuelta completa
 		if(this.getRotationalSpeed().isCounterclockwise()) {
 			if(this.position.getCurrentAngleToSun()<=0) {
 		    	this.position.setCurrentAngleToSun(360);
@@ -51,46 +59,17 @@ public  class Planet {
 			this.position.setCurrentAngleToSun(this.position.getCurrentAngleToSun()+this.rotationalSpeed.getAngularSpeedPeerDay());
 		}
 		
-		// Si llega a los 360 vuelve a 0 grados porque dio la vuelta completa
-//	    if(this.position.getCurrentAngleToSun()>=360) {
-//	    	this.position.setCurrentAngleToSun(0);
-//	    }
-//
-//	    //Actualizo el angulo del planeta respecto al sol
-//	    //Si el planeta gira sentido antihorario 
-//	    if (this.getRotationalSpeed().isCounterclockwise()) {
-//	    	int currentDegreeCounterClock = (360 - this.position.getCurrentAngleToSun());
-//			this.position.setCurrentAngleToSun(currentDegreeCounterClock-this.rotationalSpeed.getAngularSpeedPeerDay());
-//	    }else {
-//			this.position.setCurrentAngleToSun(this.position.getCurrentAngleToSun()+this.rotationalSpeed.getAngularSpeedPeerDay());
-//
-//	    }
+
+
 	    
 	    //Actualizo el angulo del planeta respecto al sol
 //		this.position.setCurrentAngleToSun(this.position.getCurrentAngleToSun()+this.rotationalSpeed.getAngularSpeedPeerDay());
-		double nexX = this.rotationalSpeed.getAngularSpeedPeerDay()*getCos(this.position.getCurrentAngleToSun());
-		double nexY = this.rotationalSpeed.getAngularSpeedPeerDay()*getSin(this.position.getCurrentAngleToSun());
+		double nexX = this.position.getDistanceToSun()*Math.cos(Math.toRadians(this.position.getCurrentAngleToSun()));
+		double nexY = this.position.getDistanceToSun()*Math.sin(Math.toRadians(this.position.getCurrentAngleToSun()));
 		this.position.setCoordinateX(nexX);
 		this.position.setCoordinateY(nexY);
 	}
 
-	private int getSin(int currentAngleToSun) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	private int getCos(int currentAngleToSun) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
+	
 	
 }
