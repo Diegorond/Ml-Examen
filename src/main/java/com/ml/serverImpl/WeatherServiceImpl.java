@@ -1,30 +1,31 @@
 package com.ml.serverImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.ml.exception.SolarSystemException;
-import com.ml.model.DayWhetherType;
 import com.ml.model.SolarSystem;
 import com.ml.model.Weather;
-import com.ml.repository.WeatherDao;
+import com.ml.repository.WeatherDAO;
 import com.ml.request.dto.WeatherResponseDTO;
 import com.ml.service.WeatherService;
 import com.ml.utils.WeatherProcessor;
 
+@Component
 public class WeatherServiceImpl implements WeatherService{
 
 	@Autowired
 	SolarSystem solarSytem;
 	
 	@Autowired
-	private WeatherDao weatherDao;
+	private WeatherDAO weatherDao;
 	
 	@Autowired
 	private WeatherProcessor weatherProcessor;
 	
 	//Devuelve el clima para un dia dado (dia 1 a 3650)
 	@Override
-	public WeatherResponseDTO findWetherByDay(int day) {
+	public WeatherResponseDTO findWetherByDay(int day) throws SolarSystemException {
 		Weather weather = weatherDao.findByDayNumber(day);
 		return buildWeatherToDTO(weather);
 	}

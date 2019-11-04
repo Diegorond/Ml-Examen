@@ -41,4 +41,8 @@ public class Position {
 		this.currentAngleToSun = currentAngleToSun;
 	}
 
+	@Override
+	public String toString() {
+		return "Position: x= " + this.coordinateX + " y= "+ this.coordinateY+ " angle= "+this.currentAngleToSun;
+	}
 }

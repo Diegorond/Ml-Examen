@@ -6,7 +6,7 @@ import com.ml.request.dto.WeatherResponseDTO;
 
 public interface WeatherService {
 
-	WeatherResponseDTO findWetherByDay(int day);
+	WeatherResponseDTO findWetherByDay(int day) throws SolarSystemException;
 	
 	void predictWeatherForTeenYears() throws SolarSystemException;
 }

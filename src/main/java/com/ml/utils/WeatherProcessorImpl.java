@@ -18,10 +18,11 @@ import com.ml.model.DayWhetherType;
 import com.ml.model.Position;
 import com.ml.model.SolarSystem;
 import com.ml.model.Weather;
+import com.ml.repository.WeatherDAO;
+
 /*Utilizo el framework JTS para topologia el cual  dara soporte para simplificar
  * algunos calculos sobre geometria. 
  */
-import com.ml.repository.WeatherDao;
 
 @Component
 public class WeatherProcessorImpl implements WeatherProcessor {
@@ -29,7 +30,7 @@ public class WeatherProcessorImpl implements WeatherProcessor {
 	private GeometryFactory geometryFactory = new GeometryFactory();
 	
 	@Autowired
-	private WeatherDao weatherDao;
+	private WeatherDAO weatherDao;
 	
 	/* (non-Javadoc)
 	 * @see com.ml.utils.WeatherProcessor#processWetherForTeenYears(com.ml.model.SolarSystem)
@@ -54,6 +55,7 @@ public class WeatherProcessorImpl implements WeatherProcessor {
 		
 		Weather weather = new Weather();
 		weather.setDayNumber(dayNumber);
+		double perimeter  = 0;
 		 //Creo el triangulo (poligono) que forman los tres planetas desalineados.
 		Polygon planetsPolygon = createPolygonBetweenPlanets(solarSystem, false);
 		//Si los planetas estan alineados entre si el poligono tendra superficie cero
@@ -61,7 +63,7 @@ public class WeatherProcessorImpl implements WeatherProcessor {
 			//Ahora verifico si ademas estan alineados respecto al sol
 			if(isPlannetsAlegnedWithSun(solarSystem)) {
 				//Los planetas estan alineados junto con el sol por lo que hay sequia
-				weather.setDayWhetherType(DayWhetherType.OPTIMAL);
+				weather.setDayWhetherType(DayWhetherType.DROUGHT);
 				weatherDao.save(weather);
 				return;
 			}
@@ -70,10 +72,10 @@ public class WeatherProcessorImpl implements WeatherProcessor {
 			weatherDao.save(weather);
 			return;
 		}
+		perimeter = planetsPolygon.getLength();
 		//Verifico  si el sol esta contenido dentro del triangulo que forman los planetas
 		if(isSunInsidePolygonPlannets(solarSystem, planetsPolygon)) {
 			//Obtengo el perimetro y se lo paso al systema solar para que evalue si es maximo y asi lo guarde
-			double perimeter = planetsPolygon.getLength();
 			solarSystem.setPerimeterMaxRegisteredBetweenPlanets(perimeter);
 			weather.setDayWhetherType(DayWhetherType.RAIN);
 			weatherDao.save(weather);
@@ -81,6 +83,7 @@ public class WeatherProcessorImpl implements WeatherProcessor {
 		}else {
 			//Los planetas forman un triangulo pero el sol no esta en su interior 
 			weather.setDayWhetherType(DayWhetherType.UNDEFINED);
+			weather.setPerimeterBetweenPlanets(perimeter);
 			weatherDao.save(weather);
 		} 
 	}
@@ -123,7 +126,8 @@ public class WeatherProcessorImpl implements WeatherProcessor {
 		  }
 		  //Agrego una cuarta posicion que se corresponde a la del primer planeta de la lista. Esto es requisito en JTS para cerrar el poligono.
 		  coordsList.add(positionToCoordinate( solarSystem.getPlanets().get(0).getPosition()));
-		  LinearRing lRing = geometryFactory.createLinearRing( (Coordinate[]) coordsList.toArray() );
+		  Coordinate[] coordArray = coordsList.stream().toArray(Coordinate[]::new);
+		  LinearRing lRing = geometryFactory.createLinearRing(coordArray);
 		  LinearRing holes[] = null; // no aplica para este caso
 		  Polygon planets = geometryFactory.createPolygon(lRing, holes );
 		return planets;

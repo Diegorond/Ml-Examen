@@ -5,8 +5,12 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+@Component
 public class SolarSystem {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(SolarSystem.class);
 	private List<Planet> planets;
 	private double perimeterMaxRegisteredBetweenPlanets;
 	
@@ -30,8 +34,9 @@ public class SolarSystem {
 	}
 	
 	public void moveOneDay() {
-		for(Planet planet:planets) {
+		for(Planet planet:planets) {	        
 			planet.moveOneDay();
+			LOGGER.info("Planeta "+ planet.getName() + " avanzo un dia " + planet.getPosition().toString());
 		}
 	}
 
