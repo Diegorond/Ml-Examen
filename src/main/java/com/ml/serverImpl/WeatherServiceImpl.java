@@ -7,6 +7,7 @@ import com.ml.exception.SolarSystemException;
 import com.ml.model.SolarSystem;
 import com.ml.model.Weather;
 import com.ml.repository.WeatherDAO;
+import com.ml.request.dto.WeatherOverviewDTO;
 import com.ml.request.dto.WeatherResponseDTO;
 import com.ml.service.WeatherService;
 import com.ml.utils.WeatherProcessor;
@@ -61,5 +62,13 @@ public class WeatherServiceImpl implements WeatherService {
 			return null;
 		}
 	}
+
+	@Override
+	public WeatherOverviewDTO makeWeatherOverview() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 
 }

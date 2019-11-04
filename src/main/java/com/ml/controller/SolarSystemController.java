@@ -44,4 +44,9 @@ public class SolarSystemController {
 		}
 	}
 	
+	@GetMapping("/clima/resumen")
+	ResponseEntity getWeatherOverview() {
+		return null;
+	} 
+	
 }
