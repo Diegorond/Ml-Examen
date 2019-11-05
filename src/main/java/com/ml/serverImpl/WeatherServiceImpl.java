@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ml.exception.SolarSystemException;
+import com.ml.model.DayWhetherType;
 import com.ml.model.SolarSystem;
 import com.ml.model.Weather;
 import com.ml.repository.WeatherDAO;
@@ -65,8 +66,16 @@ public class WeatherServiceImpl implements WeatherService {
 
 	@Override
 	public WeatherOverviewDTO makeWeatherOverview() {
-		// TODO Auto-generated method stub
-		return null;
+		WeatherOverviewDTO overviewDTO = new WeatherOverviewDTO();
+		int undefinedDay = weatherDao.countByDayWhetherType(DayWhetherType.UNDEFINED);
+		overviewDTO.setIndefinido(String.valueOf(undefinedDay));
+		int raindDay = weatherDao.countByDayWhetherType(DayWhetherType.RAIN);
+		overviewDTO.setLluvia(String.valueOf(raindDay));
+		int droughtDay = weatherDao.countByDayWhetherType(DayWhetherType.DROUGHT);
+		overviewDTO.setSequia((String.valueOf(droughtDay)));
+		int optimalDay = weatherDao.countByDayWhetherType(DayWhetherType.OPTIMAL);
+		overviewDTO.setOptimo((String.valueOf(optimalDay)));  
+		return overviewDTO;
 	}
 
 

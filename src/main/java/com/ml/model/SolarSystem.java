@@ -21,7 +21,7 @@ public class SolarSystem {
 	@PostConstruct
 	private void init() {
 		planets = new ArrayList<Planet>();
-		Planet ferengi  = new Planet( "Ferengi", new Integer(500), 1,  false); // vulcano antihorario true
+		Planet ferengi  = new Planet( "Ferengi", new Integer(500), 1,  false); 
 		Planet betasoide = new Planet("Betasoide", new Integer(2000), 3, false);
 		Planet vulcano = new Planet("Vulcano", new Integer(1000), 5, true);
 		planets.add(ferengi);
@@ -48,6 +48,7 @@ public class SolarSystem {
 		/*voy guardando el maximo perimetro registrado con el paso de los dias para mas adelante
 		saber cuando va a ser el pico de lluvia*/
 		if(perimeterMaxRegisteredBetweenPlanets>this.perimeterMaxRegisteredBetweenPlanets)
+			LOGGER.info("Nuevo perimetro maximo registrado: ",perimeterMaxRegisteredBetweenPlanets);
 			this.perimeterMaxRegisteredBetweenPlanets = perimeterMaxRegisteredBetweenPlanets;
 	}
 

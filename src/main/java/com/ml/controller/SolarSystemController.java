@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ml.exception.SolarSystemException;
+import com.ml.request.dto.WeatherOverviewDTO;
 import com.ml.request.dto.WeatherResponseDTO;
 import com.ml.service.WeatherService;
 
@@ -46,7 +47,9 @@ public class SolarSystemController {
 	
 	@GetMapping("/clima/resumen")
 	ResponseEntity getWeatherOverview() {
-		return null;
+		
+		WeatherOverviewDTO weatherOverviewDTO = weatherService.makeWeatherOverview();
+		return ResponseEntity.ok().body(weatherOverviewDTO);
 	} 
 	
 }
