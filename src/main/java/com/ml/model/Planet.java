@@ -64,12 +64,33 @@ public  class Planet {
 	    
 	    //Actualizo el angulo del planeta respecto al sol
 //		this.position.setCurrentAngleToSun(this.position.getCurrentAngleToSun()+this.rotationalSpeed.getAngularSpeedPeerDay());
-		double nexX = this.position.getDistanceToSun()*Math.cos(Math.toRadians(this.position.getCurrentAngleToSun()));
-		double nexY = this.position.getDistanceToSun()*Math.sin(Math.toRadians(this.position.getCurrentAngleToSun()));
+		double nexX = this.position.getDistanceToSun()*Math.cos(Math.toRadians(roundCosDegrees(this.position.getCurrentAngleToSun())));
+		double nexY = this.position.getDistanceToSun()*Math.sin(Math.toRadians(roundSinDegrees(this.position.getCurrentAngleToSun())));
 		this.position.setCoordinateX(nexX);
 		this.position.setCoordinateY(nexY);
 	}
 
+	//Con estos angulos (angulos notables) no devuelve el valor correspondiente por lo que los ejes no se coinciden y por lo tanto los planetas nunca se alinean
+	private int roundCosDegrees(int degrees){
+		if(degrees == 270 || degrees == 90) {
+			return 0;
+		}else if(degrees == 360 || degrees == 0){
+			return 1;
+		}else if(degrees == 180) {
+			return -1;
+		}
+		return degrees;
+	}
 	
+	private int roundSinDegrees(int degrees) {
+		if(degrees == 180 || degrees == 360 || degrees == 0) {
+			return 0;
+		}else if(degrees == 90){
+			return 1;
+		}else if(degrees == 270) {
+			return -1;
+		}
+		return degrees;
+	}
 	
 }
